@@ -609,6 +609,7 @@ sub flow {
 	}
 	$len_same = $i;
 
+	# exited functions
 	for ($i = $len_a; $i >= $len_same; $i--) {
 		my $k = "$last->[$i];$i";
 		# a unique ID is constructed from "func;depth;etime";
@@ -620,15 +621,20 @@ sub flow {
 		delete $Tmp{$k};
 	}
 
+	# entered functions
 	for ($i = $len_same; $i <= $len_b; $i++) {
 		my $k = "$this->[$i];$i";
 		$Tmp{$k}->{stime} = $v;
+	}
+
+	if (defined($this->[$len_b])) {
 		if (defined $d) {
-			$Tmp{$k}->{delta} += $i == $len_b ? $d : 0;
+			my $k = "$this->[$len_b];$len_b";
+			$Tmp{$k}->{delta} += $d;
 		}
 	}
 
-        return $this;
+  return $this;
 }
 
 # parse input
